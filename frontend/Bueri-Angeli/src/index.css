@@ -1,0 +1,63 @@
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  font-family: 'Manrope', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI',
+    sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  color: #e2e8f0;
+  background-color: #050b16;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: radial-gradient(circle at 15% 20%, rgba(69, 183, 255, 0.12), transparent 60%),
+    radial-gradient(circle at 80% 0%, rgba(35, 213, 231, 0.12), transparent 55%),
+    #050b16;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+.glass {
+  background: rgba(6, 18, 40, 0.55);
+  border: 1px solid rgba(110, 193, 255, 0.2);
+  box-shadow: 0 20px 40px rgba(3, 8, 20, 0.45);
+  backdrop-filter: blur(18px);
+}
+
+.neon-hover {
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.neon-hover:hover {
+  box-shadow: 0 0 26px rgba(69, 183, 255, 0.4);
+  transform: translateY(-2px);
+}
+
+.text-gradient {
+  background: linear-gradient(120deg, #6ec1ff, #23d5e7);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.scrollbar-hidden::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
