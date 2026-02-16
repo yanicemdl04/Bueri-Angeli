@@ -40,7 +40,7 @@ const LoginPage = () => {
                 onClick={() => setRole(item)}
                 className={`rounded-full border px-5 py-2 text-sm font-semibold transition ${
                   role === item
-                    ? 'border-sky-blue/70 bg-sky-blue/20 text-white shadow-neon'
+                    ? 'border-sky-blue/70 bg-sky-blue/20 text-white'
                     : 'border-white/10 text-slate-300 hover:border-sky-blue/50'
                 }`}
               >

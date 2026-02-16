@@ -19,7 +19,7 @@ import { getImageByCategory, images } from '../data/images'
 import { globalStats } from '../data/metrics'
 
 const LandingPage = () => {
-  const heroImage = getImageByCategory('hero')
+  const heroImage = getImageByCategory('hero') 
   const innovationImage = getImageByCategory('innovation')
   const elevesImage = getImageByCategory('eleves')
   const enseignantsImage = getImageByCategory('enseignants')
@@ -83,7 +83,7 @@ const LandingPage = () => {
 
   return (
     <PageTransition>
-      <section className="relative overflow-hidden bg-hero-gradient">
+      <section className="relative overflow-hidden bg-midnight">
         <div className="absolute inset-0 opacity-30">
           <img src={heroImage.src} alt={heroImage.title} className="h-full w-full object-cover" />
         </div>

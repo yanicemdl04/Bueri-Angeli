@@ -26,9 +26,7 @@
 body {
   margin: 0;
   min-height: 100vh;
-  background: radial-gradient(circle at 15% 20%, rgba(69, 183, 255, 0.12), transparent 60%),
-    radial-gradient(circle at 80% 0%, rgba(35, 213, 231, 0.12), transparent 55%),
-    #050b16;
+  background: #050b16;
 }
 
 #root {
@@ -42,20 +40,6 @@ body {
   backdrop-filter: blur(18px);
 }
 
-.neon-hover {
-  transition: box-shadow 0.3s ease, transform 0.3s ease;
-}
-
-.neon-hover:hover {
-  box-shadow: 0 0 26px rgba(69, 183, 255, 0.4);
-  transform: translateY(-2px);
-}
-
-.text-gradient {
-  background: linear-gradient(120deg, #6ec1ff, #23d5e7);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
 
 .scrollbar-hidden::-webkit-scrollbar {
   width: 0;

@@ -9,7 +9,7 @@ type FeatureCardProps = {
 
 const FeatureCard = ({ title, description, icon }: FeatureCardProps) => {
   return (
-    <GlassCard className="neon-hover flex h-full flex-col gap-4">
+    <GlassCard className="flex h-full flex-col gap-4 transition hover:border-white/20">
       <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-sky-blue/20 text-sky-blue">
         {icon}
       </div>

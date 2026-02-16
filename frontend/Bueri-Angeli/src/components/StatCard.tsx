@@ -28,7 +28,7 @@ const StatCard = ({ label, value, suffix }: StatCardProps) => {
   }, [value])
 
   return (
-    <GlassCard className="neon-hover flex h-full flex-col gap-2">
+    <GlassCard className="flex h-full flex-col gap-2 transition hover:border-white/20">
       <p className="text-sm text-slate-300">{label}</p>
       <p className="text-3xl font-semibold text-white">
         {display}

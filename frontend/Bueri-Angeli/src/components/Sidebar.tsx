@@ -38,7 +38,7 @@ const Sidebar = ({ role }: { role: UserRole }) => {
             className={({ isActive }) =>
               `flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-medium transition ${
                 isActive
-                  ? 'bg-sky-blue/20 text-white shadow-neon'
+                  ? 'bg-sky-blue/20 text-white'
                   : 'text-slate-300 hover:bg-white/5 hover:text-white'
               }`
             }
@@ -48,7 +48,7 @@ const Sidebar = ({ role }: { role: UserRole }) => {
           </NavLink>
         ))}
       </nav>
-      <div className="rounded-2xl bg-gradient-to-br from-sky-blue/10 via-transparent to-turquoise/10 p-4 text-xs text-slate-200">
+      <div className="rounded-2xl border border-white/10 bg-white/5 p-4 text-xs text-slate-200">
         Plateforme SIS sécurisée avec RBAC et traçabilité complète.
       </div>
     </aside>

@@ -8,7 +8,7 @@ type PrimaryButtonProps = {
 
 const PrimaryButton = ({ children, onClick, href }: PrimaryButtonProps) => {
   const className =
-    'inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-sky-blue to-turquoise px-6 py-3 text-sm font-semibold text-midnight shadow-neon transition hover:brightness-110'
+    'inline-flex items-center justify-center gap-2 rounded-full bg-mid-blue px-6 py-3 text-sm font-semibold text-white transition hover:bg-deep-blue'
 
   if (href) {
     return (

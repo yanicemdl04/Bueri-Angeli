@@ -41,7 +41,7 @@ const categorize = (name: string): ImageCategory => {
   return 'campus'
 }
 
-const imageModules = import.meta.glob('../public/images/*', {
+const imageModules = import.meta.glob('../assets/images/*', {
   eager: true,
   query: '?url',
   import: 'default'
@@ -61,7 +61,7 @@ export const getImageByCategory = (category: ImageCategory): ImageItem => {
   return (
     images.find((image) => image.category === category) ??
     images[0] ?? {
-      src: '/images/book-with-green-board-background.jpg',
+      src: '',
       title: 'Bueri Angeli',
       category: 'hero'
     }
