@@ -1,0 +1,125 @@
+// Bueri-Angeli - Schéma Prisma 7 + PostgreSQL + UUID
+
+generator client {
+  provider = "prisma-client-js"
+  output = "../generated/prisma"
+  moduleFormat = "cjs"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// 1. Utilisateur - Gestion des accès (RBAC)
+model Utilisateur {
+  idUtilisateur String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  nom           String
+  postnom       String
+  email         String    @unique
+  motDePasse    String
+  role          Role      @default(Parent)
+  dernierLogin  DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  enseignant   Enseignant?
+  notifications Notification[]
+}
+
+enum Role {
+  Admin
+  Enseignant
+  Parent
+}
+
+// 2. Notification - 1:N avec Utilisateur
+model Notification {
+  idNotification String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  titre          String
+  message        String
+  lue            Boolean   @default(false)
+  idUtilisateur  String    @db.Uuid
+  createdAt      DateTime  @default(now())
+
+  utilisateur Utilisateur @relation(fields: [idUtilisateur], references: [idUtilisateur], onDelete: Cascade)
+}
+
+// 3. ClasseScolaire - 18 classes
+model ClasseScolaire {
+  idClasse     String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  nomClasse    String
+  niveau       Niveau
+  anneeScolaire String
+
+  eleves       Eleve[]
+  enseignants  EnseignantClasse[]
+}
+
+enum Niveau {
+  Maternelle
+  Primaire
+}
+
+// 4. Eleve - 360 élèves
+model Eleve {
+  idEleve           String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  nom               String
+  prenom            String
+  dateNaissance     DateTime
+  sexe              String
+  adresse           String?
+  risquesDecrochage Float?
+  idClasse          String   @db.Uuid
+
+  classe  ClasseScolaire @relation(fields: [idClasse], references: [idClasse], onDelete: Restrict)
+  notes   Evaluation[]
+}
+
+// 5. Enseignant - Lié à Utilisateur
+model Enseignant {
+  idEnseignant  String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  specialite    String
+  telephone     String
+  idUtilisateur String   @unique @db.Uuid
+
+  utilisateur Utilisateur @relation(fields: [idUtilisateur], references: [idUtilisateur], onDelete: Cascade)
+  classes    EnseignantClasse[]
+}
+
+// Table de jointure N:N Enseignant <-> ClasseScolaire
+model EnseignantClasse {
+  idEnseignant String @db.Uuid
+  idClasse     String @db.Uuid
+
+  enseignant Enseignant     @relation(fields: [idEnseignant], references: [idEnseignant], onDelete: Cascade)
+  classe     ClasseScolaire @relation(fields: [idClasse], references: [idClasse], onDelete: Cascade)
+
+  @@id([idEnseignant, idClasse])
+}
+
+// 6. Cours - Matières avec pondération
+model Cours {
+  idCours     String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  nomCours    String
+  ponderation Int     @default(1)
+
+  evaluations Evaluation[]
+}
+
+// 7. Evaluation (Note) - Cœur académique
+model Evaluation {
+  idNote  String          @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  valeur  Float
+  type    TypeEvaluation
+  date    DateTime
+  idEleve String          @db.Uuid
+  idCours String          @db.Uuid
+
+  eleve Eleve @relation(fields: [idEleve], references: [idEleve], onDelete: Cascade)
+  cours Cours @relation(fields: [idCours], references: [idCours], onDelete: Restrict)
+}
+
+enum TypeEvaluation {
+  Interrogation
+  Examen
+}
