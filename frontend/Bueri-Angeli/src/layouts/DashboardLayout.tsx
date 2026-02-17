@@ -1,4 +1,4 @@
-import { Outlet } from 'react-router-dom'
+import { Navigate, Outlet } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import Sidebar from '../components/Sidebar'
 import Topbar from '../components/Topbar'
@@ -7,7 +7,7 @@ import { useAuth } from '../hooks/useAuth'
 const DashboardLayout = () => {
   const { role } = useAuth()
   if (!role) {
-    return null
+    return <Navigate to="/login" replace />
   }
 
   return (

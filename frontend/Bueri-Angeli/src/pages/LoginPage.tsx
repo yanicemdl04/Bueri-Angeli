@@ -5,20 +5,36 @@ import { ShieldCheck } from 'lucide-react'
 import PageTransition from '../components/PageTransition'
 import PrimaryButton from '../components/PrimaryButton'
 import GlassCard from '../components/GlassCard'
-import { useAuth, UserRole } from '../hooks/useAuth'
+import { useAuth } from '../hooks/useAuth'
 import { getImageByCategory } from '../data/images'
-
-const roles: UserRole[] = ['Admin', 'Enseignant', 'Parent']
+import type { ApiError } from '../services/api'
 
 const LoginPage = () => {
-  const [role, setRole] = useState<UserRole>('Admin')
+  const [email, setEmail] = useState('')
+  const [motDePasse, setMotDePasse] = useState('')
+  const [error, setError] = useState<string | null>(null)
+  const [loading, setLoading] = useState(false)
   const navigate = useNavigate()
-  const { loginAs } = useAuth()
+  const { login } = useAuth()
   const heroImage = getImageByCategory('hero')
 
-  const handleLogin = () => {
-    loginAs(role)
-    navigate(`/${role.toLowerCase()}`)
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setError(null)
+    if (!email.trim() || !motDePasse) {
+      setError('Email et mot de passe requis.')
+      return
+    }
+    setLoading(true)
+    try {
+      const user = await login(email.trim(), motDePasse)
+      navigate(`/${user.role.toLowerCase()}`)
+    } catch (err) {
+      const apiErr = err as ApiError
+      setError(apiErr.message || 'Connexion impossible. Vérifiez l’email et le mot de passe.')
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
@@ -30,30 +46,48 @@ const LoginPage = () => {
           </p>
           <h1 className="mt-4 text-4xl font-semibold text-white">Connexion SIS</h1>
           <p className="mt-4 text-slate-300">
-            Sélectionnez votre rôle pour accéder à un tableau de bord adapté.
+            Connectez-vous avec votre compte pour accéder au tableau de bord.
           </p>
-          <div className="mt-8 flex flex-wrap gap-3">
-            {roles.map((item) => (
-              <button
-                key={item}
-                type="button"
-                onClick={() => setRole(item)}
-                className={`rounded-full border px-5 py-2 text-sm font-semibold transition ${
-                  role === item
-                    ? 'border-sky-blue/70 bg-sky-blue/20 text-white shadow-neon'
-                    : 'border-white/10 text-slate-300 hover:border-sky-blue/50'
-                }`}
-              >
-                {item}
-              </button>
-            ))}
-          </div>
-          <div className="mt-10 max-w-sm">
-            <PrimaryButton onClick={handleLogin}>
+
+          <form onSubmit={handleSubmit} className="mt-8 space-y-4 max-w-sm">
+            <div>
+              <label htmlFor="email" className="block text-sm font-medium text-slate-300 mb-1">
+                Email
+              </label>
+              <input
+                id="email"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="admin@bueri-angeli.cd"
+                className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-white placeholder-slate-500 focus:border-sky-blue/50 focus:outline-none"
+                autoComplete="email"
+              />
+            </div>
+            <div>
+              <label htmlFor="motDePasse" className="block text-sm font-medium text-slate-300 mb-1">
+                Mot de passe
+              </label>
+              <input
+                id="motDePasse"
+                type="password"
+                value={motDePasse}
+                onChange={(e) => setMotDePasse(e.target.value)}
+                placeholder="••••••••"
+                className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-white placeholder-slate-500 focus:border-sky-blue/50 focus:outline-none"
+                autoComplete="current-password"
+              />
+            </div>
+            {error && (
+              <p className="text-sm text-red-400" role="alert">
+                {error}
+              </p>
+            )}
+            <PrimaryButton type="submit" disabled={loading}>
               <ShieldCheck size={16} />
-              Accéder au tableau de bord
+              {loading ? 'Connexion...' : 'Accéder au tableau de bord'}
             </PrimaryButton>
-          </div>
+          </form>
         </motion.div>
 
         <GlassCard className="relative overflow-hidden">

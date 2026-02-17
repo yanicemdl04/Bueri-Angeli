@@ -1,3 +1,17 @@
+# Bueri-Angeli – Frontend
+
+Interface React (Vite) pour le SIS Bueri-Angeli. Tableaux de bord Admin, Enseignant et Parent.
+
+## APIs backend
+
+Les écrans consomment les API du backend (Express). La liste des endpoints nécessaires et leur usage par écran est décrite dans le dépôt :
+
+- **Backend** : `backend/docs/API-FRONTEND.md` — liste des APIs par ressource et mapping Login / Admin / Enseignant / Parent.
+
+À l’heure actuelle, les données affichées viennent de mocks (`src/data/mock.ts`, `src/data/metrics.ts`). Pour brancher le frontend sur le backend : appeler `POST /api/auth/login` au lieu du choix de rôle, stocker le token (ex. localStorage), et utiliser les endpoints listés dans `API-FRONTEND.md` avec l’en-tête `Authorization: Bearer <token>`.
+
+---
+
 # React + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.

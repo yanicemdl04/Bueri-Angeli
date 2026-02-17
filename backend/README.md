@@ -67,6 +67,8 @@ backend/
 
 RBAC : Admin (données sensibles), Enseignant (cours/notes/élèves), Parent (lecture selon contexte).
 
+**Référence frontend** : voir [docs/API-FRONTEND.md](docs/API-FRONTEND.md) pour la liste des APIs à consommer par écran (Login, Admin, Enseignant, Parent) et le détail de chaque endpoint.
+
 ### Création des utilisateurs et rôles
 
 - **POST /api/auth/register** (inscription publique, sans token) : crée uniquement des comptes **Parent**. Pas de champ `role` dans le body ; le rôle est fixé à `Parent` côté serveur.

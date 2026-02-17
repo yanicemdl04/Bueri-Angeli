@@ -1,25 +1,51 @@
-import { useMemo } from 'react'
+import { useState, useCallback, useEffect } from 'react'
+import { authApi, type User, type UserRole } from '../services/authApi'
 
-export type UserRole = 'Admin' | 'Enseignant' | 'Parent'
+const TOKEN_KEY = 'sis-token'
+const USER_KEY = 'sis-user'
 
-const AUTH_KEY = 'sis-role'
+function getStoredUser(): User | null {
+  try {
+    const raw = window.localStorage.getItem(USER_KEY)
+    if (!raw) return null
+    const user = JSON.parse(raw) as User
+    if (user?.role) return user
+  } catch {
+    // ignore
+  }
+  return null
+}
+
+export type { UserRole }
 
 export const useAuth = () => {
-  const role = useMemo(() => {
-    const stored = window.localStorage.getItem(AUTH_KEY)
-    if (stored === 'Admin' || stored === 'Enseignant' || stored === 'Parent') {
-      return stored
-    }
-    return null
+  const [user, setUser] = useState<User | null>(() => getStoredUser())
+  const role = user?.role ?? null
+
+  useEffect(() => {
+    setUser(getStoredUser())
   }, [])
 
-  const loginAs = (nextRole: UserRole) => {
-    window.localStorage.setItem(AUTH_KEY, nextRole)
-  }
+  const login = useCallback(async (email: string, motDePasse: string) => {
+    const { token, user: u } = await authApi.login(email, motDePasse)
+    window.localStorage.setItem(TOKEN_KEY, token)
+    window.localStorage.setItem(USER_KEY, JSON.stringify(u))
+    setUser(u)
+    return u
+  }, [])
 
-  const logout = () => {
-    window.localStorage.removeItem(AUTH_KEY)
-  }
+  const logout = useCallback(() => {
+    window.localStorage.removeItem(TOKEN_KEY)
+    window.localStorage.removeItem(USER_KEY)
+    setUser(null)
+  }, [])
 
-  return { role, loginAs, logout }
+  const loginAs = useCallback((nextRole: UserRole) => {
+    const mockUser = { role: nextRole } as User
+    window.localStorage.setItem(USER_KEY, JSON.stringify(mockUser))
+    window.localStorage.setItem(TOKEN_KEY, 'mock')
+    setUser(mockUser)
+  }, [])
+
+  return { user, role, login, logout, loginAs }
 }
